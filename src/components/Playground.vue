@@ -7,7 +7,7 @@
       <div class="toolbar">
         <b-field>
           <p class="control">
-            <button class="button">
+            <button class="button" @click="compile">
               <b-icon icon="format-bold"></b-icon>
             </button>
           </p>
@@ -68,6 +68,7 @@
 
 <script>
 import Split from 'split.js';
+import * as Babel from '@babel/standalone';
 import CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/javascript/javascript';
@@ -123,17 +124,19 @@ export default {
           'Shift-Tab': cm => cm.indentSelection('subtract'),
         },
       },
-      splitPanel: null,
       sourceEditor: null,
+      targetEditor: null,
     };
   },
   methods: {
-    adjustEditors() {
-      const sizes = this.splitPanel.getSizes();
+    compile() {
+      const source = this.sourceEditor.getValue();
+      const output = Babel.transform(
+        source,
+        { presets: ['es2015'] },
+      ).code;
 
-      // eslint-disable-next-line
-      console.log(sizes);
-      this.sourceEditor.setSize(null, '100%');
+      this.targetEditor.setValue(output);
     },
   },
   components: {
@@ -161,7 +164,7 @@ export default {
       this.cmOptions,
     );
 
-    CodeMirror.fromTextArea(
+    this.targetEditor = CodeMirror.fromTextArea(
       this.$refs.transpiled,
       this.cmOptions,
     );
