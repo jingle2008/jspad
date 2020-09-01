@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@babel/standalone": "^7.0.0-beta.40",
-    "buefy": "^0.6.3",
+    "buefy": "^0.7.2",
     "codemirror": "^5.35.0",
     "split.js": "^1.3.5",
     "vue": "^2.5.13"
